@@ -1,0 +1,17 @@
+.is-invalid {
+  border: 2px solid crimson !important;
+  background-color: pink;
+
+  &::placeholder {
+    color: crimson;
+  }
+}
+
+.invalid {
+  color: crimson;
+  margin-top: 6px;
+}
+
+div {
+  margin-bottom: 16px;
+}

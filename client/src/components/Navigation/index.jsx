@@ -8,7 +8,7 @@ const Navigation = () => {
         <h4 className="navbar-brand">React x Express</h4>
         <ul className="link-wrapper">
           <li className="link">
-            <NavLink exact to="/">Home</NavLink>
+            <NavLink to="/">Home</NavLink>
           </li>
           <li className="link">
             <NavLink to="/tambah">Tambah</NavLink>
@@ -16,7 +16,7 @@ const Navigation = () => {
         </ul>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default Navigation;
