@@ -6,6 +6,7 @@
   border-radius: 5px;
   padding: 30px;
   width: 1080px;
+  color: #333;
 }
 
 .table {
@@ -59,5 +60,46 @@
     &:focus {
       outline: none;
     }
+  }
+}
+
+.error-message {
+  color: crimson;
+  margin-top: 5rem;
+  text-align: center;
+}
+
+.no-product {
+  border: none;
+  font-size: 20px;
+  text-align: center;
+  margin-top: 10rem;
+}
+
+/* HTML: <div class="loader"></div> */
+.loader {
+  width: 15px;
+  margin-top: 13rem;
+  margin-inline: auto;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  animation: l5 1s infinite linear alternate;
+}
+@keyframes l5 {
+  0% {
+    box-shadow: 20px 0 #000, -20px 0 #0002;
+    background: #000;
+  }
+  33% {
+    box-shadow: 20px 0 #000, -20px 0 #0002;
+    background: #0002;
+  }
+  66% {
+    box-shadow: 20px 0 #0002, -20px 0 #000;
+    background: #0002;
+  }
+  100% {
+    box-shadow: 20px 0 #0002, -20px 0 #000;
+    background: #000;
   }
 }

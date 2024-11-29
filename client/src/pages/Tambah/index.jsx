@@ -1,4 +1,6 @@
 import { useReducer, useState } from 'react';
+import { useSnackbar } from 'notistack';
+import { useNavigate } from 'react-router-dom';
 import Input from '../../components/Input';
 import './index.scss';
 
@@ -29,6 +31,8 @@ const Tambah = () => {
     stockError: '',
     imageDefault: '',
   });
+  const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -64,7 +68,13 @@ const Tambah = () => {
         },
         body: JSON.stringify(product),
       }).then(() => {
-        window.location.replace('/');
+        enqueueSnackbar('Produk berhasil ditambahkan', {
+          variant: 'success',
+          autoHideDuration: 2000,
+        });
+
+        // window.location.replace('/');
+        navigate('/');
       });
     }
   };

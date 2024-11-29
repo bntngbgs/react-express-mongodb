@@ -1,28 +1,33 @@
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { useSnackbar } from 'notistack';
 import './index.scss';
 
 const Home = () => {
   const [productData, setProductData] = useState([]);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     fetch('http://127.0.0.1:8080/api/products/')
       .then((result) => {
         if (!result.ok) {
-          throw new Error(`Error: ${result.statusText}`);
+          throw new Error(`${result.status} ${result.statusText}`);
         }
-
         return result.json();
       })
       .then((data) => {
         setProductData(data);
+        setLoading(false);
+        setError(null);
       })
       .catch((error) => {
         setError(error);
-        console.log(error);
+        setLoading(false);
       });
-  });
+  }, [productData.length]);
 
   const handleDelete = (e, id) => {
     fetch(`http://127.0.0.1:8080/api/products/${id}`, {
@@ -30,7 +35,25 @@ const Home = () => {
       headers: {
         'Content-Type': 'application/json',
       },
-    });
+    }).then(() =>
+      enqueueSnackbar('Produk berhasil di hapus', {
+        variant: 'warning',
+        autoHideDuration: 2000,
+      })
+    );
+
+    let productFilter = productData.filter((item) => item._id !== id);
+
+    setProductData(productFilter);
+  };
+
+  const currencyFormat = (int) => {
+    return new Intl.NumberFormat('id-ID', {
+      style: 'currency',
+      currency: 'IDR',
+    })
+      .format(int)
+      .replace(',00', '');
   };
 
   return (
@@ -39,54 +62,78 @@ const Home = () => {
         Tambah Produk
       </Link>
       <div className="search">
-        <input type="text" placeholder="Masukan kata kunci..." />
+        <input
+          type="text"
+          placeholder="Masukan kata kunci..."
+          onChange={(e) => {
+            setSearchQuery(e.target.value);
+          }}
+        />
       </div>
+      {loading && <div className="loader"></div>}
+      {error && (
+        <h2 className="error-message">{`${error.name}: ${error.message}`}</h2>
+      )}
       <table className="table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th className="text-right">Price</th>
-            <th className="text-center">Action</th>
-          </tr>
-        </thead>
+        {!loading && !error && (
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th className="text-center">Price</th>
+              <th className="text-center">Action</th>
+            </tr>
+          </thead>
+        )}
+
         <tbody>
-          {error && <tr>{error.message}</tr>}
           {productData &&
-            productData.map((data, index) => {
-              index += 1;
-              return (
-                <tr key={index}>
-                  <td>{index}</td>
-                  <td>{data.name}</td>
-                  <td className="text-right">{data.price}</td>
-                  <td className="text-center">
-                    <Link
-                      to={`/detail/${data._id}`}
-                      className="btn btn-sm btn-info"
-                    >
-                      Detail
-                    </Link>
-                    <Link
-                      to={`/edit/${data._id}`}
-                      className="btn btn-sm btn-warning"
-                    >
-                      Edit
-                    </Link>
-                    <button
-                      onClick={(e) => {
-                        handleDelete(e, data._id);
-                      }}
-                      className="btn btn-sm btn-danger"
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
+            !error &&
+            productData
+              .filter((item) => {
+                return searchQuery.toLowerCase() === ''
+                  ? item
+                  : item.name.toLowerCase().includes(searchQuery);
+              })
+              .map((data, index) => {
+                index += 1;
+                return (
+                  <tr key={data._id}>
+                    <td>{index}</td>
+                    <td>{data.name}</td>
+                    <td className="text-center">
+                      {currencyFormat(data.price)}
+                    </td>
+                    <td className="text-center">
+                      <Link
+                        to={`/detail/${data._id}`}
+                        className="btn btn-sm btn-info"
+                      >
+                        Detail
+                      </Link>
+                      <Link
+                        to={`/edit/${data._id}`}
+                        className="btn btn-sm btn-warning"
+                      >
+                        Edit
+                      </Link>
+                      <button
+                        onClick={(e) => {
+                          handleDelete(e, data._id);
+                        }}
+                        className="btn btn-sm btn-danger"
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
         </tbody>
       </table>
+      {productData.length < 1 && !loading && !error && (
+        <h2 className="no-product">Belum ada produk</h2>
+      )}
     </div>
   );
 };

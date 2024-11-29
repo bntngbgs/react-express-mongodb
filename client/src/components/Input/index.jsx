@@ -20,7 +20,7 @@ const Input = (props) => {
     );
   } else {
     return (
-      <div>
+      <div className="input-wrapper">
         <label>{props.label}</label>
 
         <input

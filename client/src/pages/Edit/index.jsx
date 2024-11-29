@@ -1,6 +1,8 @@
 import { useState, useEffect, useReducer } from 'react';
-import Input from '../../components/Input';
 import { useParams } from 'react-router-dom';
+import { useSnackbar } from 'notistack';
+import { useNavigate } from 'react-router-dom';
+import Input from '../../components/Input';
 
 const errorReducer = (state, action) => {
   switch (action.type) {
@@ -29,6 +31,10 @@ const Edit = () => {
     image_url: '',
     status: false,
   });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const { enqueueSnackbar } = useSnackbar();
+  const navigate = useNavigate();
 
   let { id } = useParams();
 
@@ -39,6 +45,7 @@ const Edit = () => {
       })
       .then((data) => {
         setProduct(data);
+        setLoading(false);
       });
   }, [id]);
 
@@ -77,14 +84,28 @@ const Edit = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(product),
-      }).then(() => {
-        window.location.replace('/');
-      });
+      })
+        .then(() => {
+          enqueueSnackbar('Produk berhasil di update', {
+            variant: 'info',
+            autoHideDuration: 2000,
+          });
+          navigate('/');
+        })
+        .catch((error) => {
+          setError(error);
+          setLoading(false);
+        });
     }
   };
 
   return (
     <div className="main">
+      {error && (
+        <h2 className="error-message">{`${error.name}: ${error.message}`}</h2>
+      )}
+      {loading && <div className="loader"></div>}
+
       <div className="card">
         <h2>Edit Produk</h2>
         <br />

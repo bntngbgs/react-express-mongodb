@@ -1,9 +1,12 @@
 import { Link, useParams } from 'react-router-dom';
-import './index.scss';
 import { useEffect, useState } from 'react';
+// import linkLogo from ''
+import './index.scss';
 
 const Detail = () => {
   const [product, setProduct] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   let { id } = useParams();
 
   useEffect(() => {
@@ -13,11 +16,12 @@ const Detail = () => {
       })
       .then((data) => {
         setProduct(data);
-        console.log(data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        setError(error);
+        setLoading(false);
       });
-    // .then((data) => {
-
-    // });
   }, [id]);
 
   return (
@@ -25,31 +29,58 @@ const Detail = () => {
       <Link to="/" className="btn btn-primary">
         Kembali
       </Link>
+      {error && (
+        <h2 className="error-message">{`${error.name}: ${error.message}`}</h2>
+      )}
+      {loading && <div className="loader"></div>}
 
-      <table className="table">
-        <tbody>
-          <tr>
-            <td>ID</td>
-            <td>: {product._id}</td>
-          </tr>
-          <tr>
-            <td>Name</td>
-            <td>: {product.name}</td>
-          </tr>
-          <tr>
-            <td>Price</td>
-            <td>: {product.price}</td>
-          </tr>
-          <tr>
-            <td>Stock</td>
-            <td>: {product.stock}</td>
-          </tr>
-          <tr>
-            <td>Gambar</td>
-            <td>: {product.image_url || '[tidak ada gambar]'}</td>
-          </tr>
-        </tbody>
-      </table>
+      {!loading && (
+        <table className="table">
+          <tbody>
+            <tr>
+              <td>ID</td>
+              <td>: {product._id}</td>
+            </tr>
+            <tr>
+              <td>Name</td>
+              <td>: {product.name}</td>
+            </tr>
+            <tr>
+              <td>Price</td>
+              <td>: {product.price}</td>
+            </tr>
+            <tr>
+              <td>Stock</td>
+              <td>: {product.stock}</td>
+            </tr>
+            <tr>
+              <td>Status</td>
+              <td className={product.status ? 'active' : 'unactive'}>
+                : {product.status ? 'Active' : 'Unactive'}
+              </td>
+            </tr>
+            <tr>
+              <td>Gambar</td>
+              <td>
+                <span>: </span>
+                {product.image_url ? (
+                  <a
+                    href={product.image_url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="image-link"
+                  >
+                    <p>Link</p>
+                    <img src="/external-link.png" alt="" />
+                  </a>
+                ) : (
+                  '[tidak ada gambar]'
+                )}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      )}
     </div>
   );
 };
