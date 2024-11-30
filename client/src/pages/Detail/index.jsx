@@ -10,7 +10,7 @@ const Detail = () => {
   let { id } = useParams();
 
   useEffect(() => {
-    fetch(`http://127.0.0.1:8080/api/products/${id}`)
+    fetch(`http://127.0.0.1:8181/api/v2/products/${id}`)
       .then((result) => {
         return result.json();
       })

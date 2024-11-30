@@ -11,7 +11,7 @@ const Home = () => {
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
-    fetch('http://127.0.0.1:8080/api/products/')
+    fetch('http://127.0.0.1:8181/api/v2/products/')
       .then((result) => {
         if (!result.ok) {
           throw new Error(`${result.status} ${result.statusText}`);
@@ -30,7 +30,7 @@ const Home = () => {
   }, [productData.length]);
 
   const handleDelete = (e, id) => {
-    fetch(`http://127.0.0.1:8080/api/products/${id}`, {
+    fetch(`http://127.0.0.1:8181/api/v2/products/${id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',

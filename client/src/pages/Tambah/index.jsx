@@ -61,19 +61,25 @@ const Tambah = () => {
 
     // console.log(error);
     if (product.name && product.price && product.stock) {
-      fetch(`http://127.0.0.1:8080/api/products/`, {
+      fetch(`http://127.0.0.1:8181/api/v2/products/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(product),
-      }).then(() => {
+      }).then((result) => {
+        if (!result.ok) {
+          return enqueueSnackbar('network error', {
+            variant: 'error',
+            autoHideDuration: 2000,
+          });
+        }
+
         enqueueSnackbar('Produk berhasil ditambahkan', {
           variant: 'success',
           autoHideDuration: 2000,
         });
 
-        // window.location.replace('/');
         navigate('/');
       });
     }

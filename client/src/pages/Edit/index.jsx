@@ -39,12 +39,20 @@ const Edit = () => {
   let { id } = useParams();
 
   useEffect(() => {
-    fetch(`http://127.0.0.1:8080/api/products/${id}`)
+    fetch(`http://127.0.0.1:8181/api/v2/products/${id}`)
       .then((result) => {
+        if (!result.ok) {
+          throw new Error('something wrong with the network');
+        }
+
         return result.json();
       })
       .then((data) => {
         setProduct(data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        setError(error);
         setLoading(false);
       });
   }, [id]);
@@ -78,7 +86,7 @@ const Edit = () => {
     }
 
     if (product.name && product.price && product.stock) {
-      fetch(`http://127.0.0.1:8080/api/products/${id}`, {
+      fetch(`http://127.0.0.1:8181/api/v2/products/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -106,86 +114,88 @@ const Edit = () => {
       )}
       {loading && <div className="loader"></div>}
 
-      <div className="card">
-        <h2>Edit Produk</h2>
-        <br />
-        <form onSubmit={(e) => handleSubmit(e)}>
-          <Input
-            name="name"
-            type="text"
-            placeholder="Nama Produk..."
-            label="Nama"
-            value={product.name}
-            error={state.nameError}
-            onChange={(e) => {
-              state.nameError = '';
-              setProduct((prevState) => ({
-                ...prevState,
-                name: e.target.value,
-              }));
-            }}
-          />
-          <Input
-            name="price"
-            type="number"
-            placeholder="Harga Produk..."
-            label="Harga"
-            value={product.price}
-            error={state.priceError}
-            onChange={(e) => {
-              state.priceError = '';
-              setProduct((prevState) => ({
-                ...prevState,
-                price: e.target.value,
-              }));
-            }}
-          />
-          <Input
-            name="stock"
-            type="number"
-            placeholder="Stock Produk..."
-            label="stock"
-            value={product.stock}
-            error={state.stockError}
-            onChange={(e) => {
-              state.stockError = '';
-              setProduct((prevState) => ({
-                ...prevState,
-                stock: e.target.value,
-              }));
-            }}
-          />
-          <Input
-            name="image_url"
-            type="text"
-            placeholder="Link Gambar..."
-            label="image"
-            value={product.image_url}
-            error={state.imageDefault}
-            onChange={(e) =>
-              setProduct((prevState) => ({
-                ...prevState,
-                image_url: e.target.value,
-              }))
-            }
-          />
-          <Input
-            name="status"
-            type="checkbox"
-            label="Active"
-            checked={product.status}
-            onChange={(e) => {
-              setProduct((prevState) => ({
-                ...prevState,
-                status: e.target.checked,
-              }));
-            }}
-          />
-          <button type="submit" className="btn btn-primary">
-            Simpan
-          </button>
-        </form>
-      </div>
+      {!loading && !error && (
+        <div className="card">
+          <h2>Edit Produk</h2>
+          <br />
+          <form onSubmit={(e) => handleSubmit(e)}>
+            <Input
+              name="name"
+              type="text"
+              placeholder="Nama Produk..."
+              label="Nama"
+              value={product.name}
+              error={state.nameError}
+              onChange={(e) => {
+                state.nameError = '';
+                setProduct((prevState) => ({
+                  ...prevState,
+                  name: e.target.value,
+                }));
+              }}
+            />
+            <Input
+              name="price"
+              type="number"
+              placeholder="Harga Produk..."
+              label="Harga"
+              value={product.price}
+              error={state.priceError}
+              onChange={(e) => {
+                state.priceError = '';
+                setProduct((prevState) => ({
+                  ...prevState,
+                  price: e.target.value,
+                }));
+              }}
+            />
+            <Input
+              name="stock"
+              type="number"
+              placeholder="Stock Produk..."
+              label="stock"
+              value={product.stock}
+              error={state.stockError}
+              onChange={(e) => {
+                state.stockError = '';
+                setProduct((prevState) => ({
+                  ...prevState,
+                  stock: e.target.value,
+                }));
+              }}
+            />
+            <Input
+              name="image_url"
+              type="text"
+              placeholder="Link Gambar..."
+              label="image"
+              value={product.image_url}
+              error={state.imageDefault}
+              onChange={(e) =>
+                setProduct((prevState) => ({
+                  ...prevState,
+                  image_url: e.target.value,
+                }))
+              }
+            />
+            <Input
+              name="status"
+              type="checkbox"
+              label="Active"
+              checked={product.status}
+              onChange={(e) => {
+                setProduct((prevState) => ({
+                  ...prevState,
+                  status: e.target.checked,
+                }));
+              }}
+            />
+            <button type="submit" className="btn btn-primary">
+              Simpan
+            </button>
+          </form>
+        </div>
+      )}
     </div>
   );
 };
