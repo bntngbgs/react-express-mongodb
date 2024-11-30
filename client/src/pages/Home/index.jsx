@@ -65,20 +65,19 @@ const Home = () => {
         <input
           type="text"
           placeholder="Masukan kata kunci..."
-          onChange={(e) => {
-            setSearchQuery(e.target.value);
-          }}
+          onChange={(e) => setSearchQuery(e.target.value)}
         />
       </div>
       {loading && <div className="loader"></div>}
       {error && (
         <h2 className="error-message">{`${error.name}: ${error.message}`}</h2>
       )}
+
       <table className="table">
         {!loading && !error && (
           <thead>
             <tr>
-              <th>ID</th>
+              <th>No.</th>
               <th>Name</th>
               <th className="text-center">Price</th>
               <th className="text-center">Action</th>
