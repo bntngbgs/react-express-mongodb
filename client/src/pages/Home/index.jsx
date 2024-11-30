@@ -30,6 +30,9 @@ const Home = () => {
   }, [productData.length]);
 
   const handleDelete = (e, id) => {
+    let productFilter = productData.filter((item) => item._id !== id);
+
+    setProductData(productFilter);
     fetch(
       `https://react-express-mongodb-services.vercel.app/api/v2/products/${id}`,
       {
@@ -43,9 +46,6 @@ const Home = () => {
         variant: 'warning',
         autoHideDuration: 2000,
       });
-      let productFilter = productData.filter((item) => item._id !== id);
-
-      setProductData(productFilter);
     });
   };
 
