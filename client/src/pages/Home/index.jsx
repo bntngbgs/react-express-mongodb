@@ -38,18 +38,15 @@ const Home = () => {
           'Content-Type': 'application/json',
         },
       }
-    )
-      .then(() =>
-        enqueueSnackbar('Produk berhasil di hapus', {
-          variant: 'warning',
-          autoHideDuration: 2000,
-        })
-      )
-      .then(() => {
-        let productFilter = productData.filter((item) => item._id !== id);
-
-        setProductData(productFilter);
+    ).then(() => {
+      enqueueSnackbar('Produk berhasil di hapus', {
+        variant: 'warning',
+        autoHideDuration: 2000,
       });
+      let productFilter = productData.filter((item) => item._id !== id);
+
+      setProductData(productFilter);
+    });
   };
 
   const currencyFormat = (int) => {
