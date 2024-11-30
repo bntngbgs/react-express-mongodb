@@ -12,10 +12,6 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/api/v2', productRouter);
 
-app.get('/', (req, res) => {
-  res.send({ msg: 'Hello World' });
-});
-
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
