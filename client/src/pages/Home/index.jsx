@@ -30,9 +30,6 @@ const Home = () => {
   }, [productData.length]);
 
   const handleDelete = (e, id) => {
-    let productFilter = productData.filter((item) => item._id !== id);
-
-    setProductData(productFilter);
     fetch(
       `https://react-express-mongodb-services.vercel.app/api/v2/products/${id}`,
       {
@@ -42,6 +39,9 @@ const Home = () => {
         },
       }
     ).then(() => {
+      let productFilter = productData.filter((item) => item._id !== id);
+
+      setProductData(productFilter);
       enqueueSnackbar('Produk berhasil di hapus', {
         variant: 'warning',
         autoHideDuration: 2000,
