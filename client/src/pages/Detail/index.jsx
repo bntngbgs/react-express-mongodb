@@ -10,7 +10,7 @@ const Detail = () => {
   let { id } = useParams();
 
   useEffect(() => {
-    fetch(`http://127.0.0.1:8181/api/v2/products/${id}`)
+    fetch(`https://react-express-mongodb-tau.vercel.app/api/v2/products/${id}`)
       .then((result) => {
         return result.json();
       })

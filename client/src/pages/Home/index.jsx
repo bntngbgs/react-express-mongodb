@@ -11,7 +11,7 @@ const Home = () => {
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
-    fetch('http://127.0.0.1:8181/api/v2/products/')
+    fetch('https://react-express-mongodb-tau.vercel.app/api/v2/products/')
       .then((result) => {
         if (!result.ok) {
           throw new Error(`${result.status} ${result.statusText}`);
@@ -30,12 +30,15 @@ const Home = () => {
   }, [productData.length]);
 
   const handleDelete = (e, id) => {
-    fetch(`http://127.0.0.1:8181/api/v2/products/${id}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }).then(() =>
+    fetch(
+      `https://react-express-mongodb-tau.vercel.app/api/v2/products/${id}`,
+      {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    ).then(() =>
       enqueueSnackbar('Produk berhasil di hapus', {
         variant: 'warning',
         autoHideDuration: 2000,

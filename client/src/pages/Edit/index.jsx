@@ -39,7 +39,7 @@ const Edit = () => {
   let { id } = useParams();
 
   useEffect(() => {
-    fetch(`http://127.0.0.1:8181/api/v2/products/${id}`)
+    fetch(`https://react-express-mongodb-tau.vercel.app/api/v2/products/${id}`)
       .then((result) => {
         if (!result.ok) {
           throw new Error('something wrong with the network');
@@ -86,13 +86,16 @@ const Edit = () => {
     }
 
     if (product.name && product.price && product.stock) {
-      fetch(`http://127.0.0.1:8181/api/v2/products/${id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(product),
-      })
+      fetch(
+        `https://react-express-mongodb-tau.vercel.app/api/v2/products/${id}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(product),
+        }
+      )
         .then(() => {
           enqueueSnackbar('Produk berhasil di update', {
             variant: 'info',
