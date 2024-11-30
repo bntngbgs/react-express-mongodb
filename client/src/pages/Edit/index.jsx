@@ -39,7 +39,9 @@ const Edit = () => {
   let { id } = useParams();
 
   useEffect(() => {
-    fetch(`https://react-express-mongodb-tau.vercel.app/api/v2/products/${id}`)
+    fetch(
+      `https://react-express-mongodb-services.vercel.app/api/v2/products/${id}`
+    )
       .then((result) => {
         if (!result.ok) {
           throw new Error('something wrong with the network');
@@ -87,7 +89,7 @@ const Edit = () => {
 
     if (product.name && product.price && product.stock) {
       fetch(
-        `https://react-express-mongodb-tau.vercel.app/api/v2/products/${id}`,
+        `https://react-express-mongodb-services.vercel.app/api/v2/products/${id}`,
         {
           method: 'PUT',
           headers: {

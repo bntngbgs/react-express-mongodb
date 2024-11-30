@@ -61,13 +61,16 @@ const Tambah = () => {
 
     // console.log(error);
     if (product.name && product.price && product.stock) {
-      fetch(`https://react-express-mongodb-tau.vercel.app/api/v2/products/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(product),
-      }).then((result) => {
+      fetch(
+        `https://react-express-mongodb-services.vercel.app/api/v2/products/`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(product),
+        }
+      ).then((result) => {
         if (!result.ok) {
           return enqueueSnackbar('network error', {
             variant: 'error',

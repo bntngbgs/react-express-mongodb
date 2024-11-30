@@ -11,7 +11,7 @@ const Home = () => {
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
-    fetch('https://react-express-mongodb-tau.vercel.app/api/v2/products/')
+    fetch('https://react-express-mongodb-services.vercel.app/api/v2/products/')
       .then((result) => {
         if (!result.ok) {
           throw new Error(`${result.status} ${result.statusText}`);
@@ -31,7 +31,7 @@ const Home = () => {
 
   const handleDelete = (e, id) => {
     fetch(
-      `https://react-express-mongodb-tau.vercel.app/api/v2/products/${id}`,
+      `https://react-express-mongodb-services.vercel.app/api/v2/products/${id}`,
       {
         method: 'DELETE',
         headers: {
